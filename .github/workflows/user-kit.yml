@@ -1,0 +1,120 @@
+name: User Kit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/user-kit.yml"
+      - ".gitignore"
+      - "Makefile"
+      - "README*"
+      - "dev/user-kit/**"
+      - "dev/user-kit.json"
+      - "mmio.h"
+      - "prog/**"
+      - "rtl/**"
+      - "scripts/assemble-cores.py"
+      - "scripts/export-user-kit.py"
+      - "sim/**"
+      - "user-cores/**"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: user-kit-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  export-and-test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      SOURCE_SHA: ${{ github.sha }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+
+      - name: Install Verilator
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y verilator
+
+      - name: Check and lint source tree
+        run: |
+          make check
+          make lint
+
+      - name: Export User Kit
+        run: make export-user-kit
+
+      - name: Verify User Kit contents
+        run: |
+          test -f build/user-kit/.gitignore
+          test -f build/user-kit/README.md
+          test -f build/user-kit/README.en.md
+          test ! -e build/user-kit/build
+          test ! -e build/user-kit/dev
+          test ! -e build/user-kit/SOC_KIT_VERSION
+          test ! -e build/user-kit/VERSION
+          test ! -e build/user-kit/top.txt
+          test ! -e build/user-kit/scripts/export-user-kit.py
+
+      - name: Test exported User Kit
+        run: |
+          make -C build/user-kit check
+          make -C build/user-kit lint
+          make -C build/user-kit clean
+          test ! -e build/user-kit/build
+
+      - name: Upload User Kit artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: mpsoc-osoc-user-kit
+          path: build/user-kit/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 14
+
+  publish:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: export-and-test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+
+      - name: Download tested User Kit
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: mpsoc-osoc-user-kit
+          path: ${{ runner.temp }}/mpsoc-osoc-user-kit
+
+      - name: Publish user-kit branch
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          export_dir="$RUNNER_TEMP/mpsoc-osoc-user-kit"
+          test -f "$export_dir/.gitignore"
+          test ! -e "$export_dir/build"
+          staging_dir="$(mktemp -d)"
+          cp -a "$export_dir/." "$staging_dir/"
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git switch --orphan user-kit-work
+          git rm -rf --ignore-unmatch .
+          cp -a "$staging_dir/." .
+          git add -A
+          git commit -m "user-kit: export ${SOURCE_SHA}"
+          git push --force origin HEAD:user-kit

@@ -14,7 +14,13 @@ def is_excluded(root: Path, source: Path, excludes: list[Path]) -> bool:
     return any(relative == item or item in relative.parents for item in excludes)
 
 
-def copy_checked(root: Path, output: Path, name: str, excludes: list[Path]) -> None:
+def copy_checked(
+    root: Path,
+    output: Path,
+    name: str,
+    excludes: list[Path],
+    destination: str | None = None,
+) -> None:
     source = (root / name).resolve()
     try:
         source.relative_to(root.resolve())
@@ -24,7 +30,12 @@ def copy_checked(root: Path, output: Path, name: str, excludes: list[Path]) -> N
         raise FileNotFoundError(name)
     if is_excluded(root.resolve(), source, excludes):
         return
-    target = (output / name).resolve()
+    target_name = destination or name
+    target = (output / target_name).resolve()
+    try:
+        target.relative_to(output.resolve())
+    except ValueError as exc:
+        raise ValueError(f"destination escapes output: {target_name}") from exc
     target.parent.mkdir(parents=True, exist_ok=True)
     if source.is_dir():
         def ignore(directory: str, names: list[str]) -> set[str]:
@@ -68,6 +79,14 @@ def main() -> int:
             copy_checked(root, output, name, excludes)
         for name in manifest["trees"]:
             copy_checked(root, output, name, excludes)
+        for override in manifest.get("overrides", []):
+            copy_checked(
+                root,
+                output,
+                override["source"],
+                excludes,
+                override["destination"],
+            )
     except (KeyError, FileNotFoundError, ValueError, OSError) as exc:
         parser.error(str(exc))
     print(f"exported user kit to {output}")

@@ -1,5 +1,6 @@
 {
   "files": [
+    ".gitignore",
     "Makefile",
     "README.md",
     "README.en.md",
@@ -13,9 +14,7 @@
     "sim/replace_psram_wrapper.awk",
     "prog/hello-minirv-ysyxsoc.bin",
     "scripts/assemble-cores.py",
-    "scripts/export-user-kit.py",
     "prog/change-cpuid.sh",
-    "dev/user-kit.json",
     "user-cores/cores.list",
     "user-cores/npc_wrapper_template.sv"
   ],
@@ -28,5 +27,19 @@
   ],
   "exclude": [
     "build"
+  ],
+  "overrides": [
+    {
+      "source": "dev/user-kit/Makefile",
+      "destination": "Makefile"
+    },
+    {
+      "source": "dev/user-kit/README.md",
+      "destination": "README.md"
+    },
+    {
+      "source": "dev/user-kit/README.en.md",
+      "destination": "README.en.md"
+    }
   ]
 }
