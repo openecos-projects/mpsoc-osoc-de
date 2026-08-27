@@ -1,0 +1,32 @@
+{
+  "files": [
+    "Makefile",
+    "README.md",
+    "README.en.md",
+    "mmio.h",
+    "rtl/filelist.f",
+    "rtl/simflag.txt",
+    "sim/Makefile",
+    "sim/sim_main.cpp",
+    "sim/psram_wrapper_fast.sv",
+    "sim/spi_top_apb_fast.sv",
+    "sim/replace_psram_wrapper.awk",
+    "prog/hello-minirv-ysyxsoc.bin",
+    "scripts/assemble-cores.py",
+    "scripts/export-user-kit.py",
+    "prog/change-cpuid.sh",
+    "dev/user-kit.json",
+    "user-cores/cores.list",
+    "user-cores/npc_wrapper_template.sv"
+  ],
+  "trees": [
+    "rtl/soc",
+    "rtl/cpu",
+    "rtl/mcu",
+    "rtl/new-ip",
+    "rtl/perip"
+  ],
+  "exclude": [
+    "build"
+  ]
+}
