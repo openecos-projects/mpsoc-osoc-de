@@ -87,8 +87,3 @@ Makefile 和双语 README，不包含 `dev/`、维护者导出脚本、构建产
 - 不要修改 `prog/change-cpuid.sh`；回归固定使用发布包提供的 `.bin` 镜像。
 - 当前版本固定按 50 MHz 配置收束，`soc_pkg` 自定义地址空间留待后续版本。
 - 用户 core 的简单总线时序和功能正确性由提交方负责。
-
-## 分支和提交
-
-开发修改使用 feature branch，通过 Pull Request 合并到 `main`。合并后由 CI
-自动生成用户发行分支；`user-kit` 分支不应直接手工修改。

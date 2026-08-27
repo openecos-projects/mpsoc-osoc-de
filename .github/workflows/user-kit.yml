@@ -15,6 +15,7 @@ on:
       - "rtl/**"
       - "scripts/assemble-cores.py"
       - "scripts/export-user-kit.py"
+      - "scripts/ci/install_verilator.sh"
       - "sim/**"
       - "user-cores/**"
   pull_request:
@@ -41,9 +42,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install Verilator
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y verilator
+        run: bash scripts/ci/install_verilator.sh
 
       - name: Check and lint source tree
         run: |

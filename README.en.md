@@ -98,9 +98,3 @@ files, or top-name metadata.
 - The current release is constrained to the 50 MHz configuration; custom
   `soc_pkg` address spaces are reserved for a future release.
 - The submitting user owns simple-bus timing and functional correctness.
-
-## Branch and commit workflow
-
-Develop on feature branches and merge through Pull Requests into `main`. After
-the merge, CI creates the user distribution branch automatically; never edit
-`user-kit` directly.
