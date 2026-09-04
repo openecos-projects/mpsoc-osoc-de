@@ -1,6 +1,6 @@
-# mpsoc-osoc
+# mpsoc-osoc-DE
 
-这是 `mpsoc-osoc` 的开发者和维护者仓库。它提供固定地址、固定总线的 SoC
+这是 `mpsoc-osoc-DE` 的开发者和维护者仓库。它提供固定地址、固定总线的 SoC
 模板，以及由 CI 自动生成的用户发行环境。
 
 用户发行包的规范说明位于 `dev/user-kit/README.md`，英文版本位于

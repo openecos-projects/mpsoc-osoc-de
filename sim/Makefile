@@ -12,7 +12,7 @@ SIM_BIN := $(OBJ_DIR)/VSimTop
 
 VERILATOR ?= $(if $(wildcard $(HOME)/oss-cad-suite/bin/verilator),$(HOME)/oss-cad-suite/bin/verilator,verilator)
 BASE_IMAGE := $(ROOT)/prog/hello-minirv-ysyxsoc.bin
-CPU_ID ?= 1
+CPU_ID ?= 0
 GENERATED_IMAGE := $(BUILD_DIR)/images/hello-minirv-ysyxsoc-cpu$(CPU_ID).bin
 IMAGE ?= $(GENERATED_IMAGE)
 CORE_SEL ?= $(CPU_ID)

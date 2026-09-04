@@ -74,7 +74,7 @@ jobs:
       - name: Upload User Kit artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: mpsoc-osoc-user-kit
+          name: mpsoc-osoc-DE-user-kit
           path: build/user-kit/
           if-no-files-found: error
           include-hidden-files: true
@@ -96,15 +96,15 @@ jobs:
       - name: Download tested User Kit
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          name: mpsoc-osoc-user-kit
-          path: ${{ runner.temp }}/mpsoc-osoc-user-kit
+          name: mpsoc-osoc-DE-user-kit
+          path: ${{ runner.temp }}/mpsoc-osoc-DE-user-kit
 
       - name: Publish user-kit branch
         env:
           SOURCE_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
-          export_dir="$RUNNER_TEMP/mpsoc-osoc-user-kit"
+          export_dir="$RUNNER_TEMP/mpsoc-osoc-DE-user-kit"
           test -f "$export_dir/.gitignore"
           test ! -e "$export_dir/build"
           staging_dir="$(mktemp -d)"

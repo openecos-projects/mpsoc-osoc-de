@@ -24,7 +24,7 @@ assemble:
 	@python3 scripts/assemble-cores.py --root . --manifest $(USER_CORES)
 
 lint: assemble
-	@$(MAKE) -C sim lint USER_CORES=$(abspath $(USER_CORES))
+	@$(MAKE) -C sim lint CPU_ID=$(CPU_ID) USER_CORES=$(abspath $(USER_CORES))
 
 image:
 	@$(MAKE) -C sim image CPU_ID=$(CPU_ID)
