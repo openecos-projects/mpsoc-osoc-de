@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export the public mpsoc-osoc-DE user kit without build artifacts."""
+"""Export the public mpsoc-osoc-de user kit without build artifacts."""
 
 from __future__ import annotations
 

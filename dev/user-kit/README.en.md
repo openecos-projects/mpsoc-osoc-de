@@ -1,4 +1,4 @@
-# mpsoc-osoc-DE User Kit
+# mpsoc-osoc-de User Kit
 
 [中文说明](README.md)
 
