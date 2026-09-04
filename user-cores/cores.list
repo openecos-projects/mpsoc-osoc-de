@@ -1,0 +1,7 @@
+# Sequential user core slots.
+# Format: <slot> <module-name> <source-relative-to-user-cores>
+#
+# Leave this file empty to run the bundled reference NPC in all 32 slots.
+# Example:
+# 0 UserCore0 core0/core.sv
+# 1 UserCore1 core1/core.sv

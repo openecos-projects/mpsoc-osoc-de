@@ -1,0 +1,14 @@
+build/
+*.fst
+*.vcd
+*.fsdb
+*.log
+*.elf
+*.hex
+*.o
+*.pyc
+obj_dir/
+__pycache__/
+
+# Local user submissions are kept outside the published fixed RTL.
+/user-cores/*/build/
